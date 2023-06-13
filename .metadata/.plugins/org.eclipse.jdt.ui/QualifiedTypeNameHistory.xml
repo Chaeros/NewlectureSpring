@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="spring.di.entity.Exam"/>
+<fullyQualifiedTypeName name="spring.di.ui.ExamConsole"/>
+<fullyQualifiedTypeName name="spring.di.ui.InlineExamConsole"/>
+</qualifiedTypeNameHistroy>

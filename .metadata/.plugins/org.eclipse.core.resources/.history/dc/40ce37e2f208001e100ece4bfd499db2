@@ -1,0 +1,9 @@
+package spring.di;
+
+public class Program {
+		public static void main(String[] args) {
+			Exam exam=new NewlecExam();
+			ExamConsole console = new InlineExamConsole(exam);
+			console.print();
+		}
+}
