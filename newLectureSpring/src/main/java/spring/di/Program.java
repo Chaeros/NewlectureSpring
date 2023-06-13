@@ -10,6 +10,7 @@ public class Program {
 			Exam exam=new NewlecExam();
 			ExamConsole console = new InlineExamConsole(exam);  // exam 객체를 DI 하고있다.
 			//ExamConsole console = new GridExamConsole(exam);
+			console.setExam(exam);
 			console.print();
 		}
 }
