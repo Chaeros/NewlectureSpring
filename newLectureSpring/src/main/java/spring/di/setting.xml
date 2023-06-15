@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p">
 	<!-- Exam exam=new NewlecExam(); 아래는 객체를 생성한 것-->
-	<bean id="exam" class="spring.di.entity.NewlecExam" />
+	<bean id="exam" class="spring.di.entity.NewlecExam" p:kor="10" p:eng="10">
+		
+		<!--<property name="kor">
+			<value>10</value>
+		</property>
+		<property name="eng" value="10"/>
+		<property name="math" value="10"/>
+		<property name="com" value="10"/>-->
+		
+		<!-- 매개 변수가 있는 생성자에 순서대로 값을 넣음, index 사용하면 순서 설정 가능 또는 name -->
+		<!--  <constructor-arg name="kor" type="float" value="10"/>
+		<constructor-arg index="1" type="float" value="20"/>
+		<constructor-arg index="3" type="float" value="30"/>
+		<constructor-arg index="2" type="float" value="40"/> -->
+	
+	</bean>
 	<!-- ExamConsole console = new GridExamConsole(exam); -->
-	<bean id="console" class="spring.di.ui.GridExamConsole">
+	<bean id="console" class="spring.di.ui.InlineExamConsole">
 		<!-- console.setExam(exam); 아래는 Injection을 한 것임-->
 		<property name="exam" ref="exam"/>
 	</bean>
 	
+	<util:list id="exams" list-class="java.util.ArrayList">
+		<bean class="spring.di.entity.NewlecExam" p:kor="1" p:eng="3"/>
+		<ref bean="exam"/>
+	</util:list>
+	
+	<!--  <bean id="exams" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean class="spring.di.entity.NewlecExam" p:kor="20" p:eng="30"/>
+				<ref bean="exam"/>
+			</list>
+		</constructor-arg>
+	</bean>-->
 </beans>
