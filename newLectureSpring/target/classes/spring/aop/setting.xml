@@ -9,11 +9,28 @@
 	xmlns:context="http://www.springframework.org/schema/context">
 	
 	<!-- 스프링에서는 모든 설정을 setting xml에서 처리함 -->
-	<bean id="target" class="spring.aop.entity.NewlecExam" p:kor="101" p:eng="1" p:math="1" p:com="1"/>
+	<bean id="target" class="spring.aop.entity.NewlecExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
 	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
 	<bean id="logBeforeAdvice" class="spring.aop.advice.LogBeforeAdvice"/>
 	<bean id="logAfterReturningAdvice" class="spring.aop.advice.LogAfterReturningAdvice"/>
 	<bean id="logAfterThrowingAdvice" class="spring.aop.advice.LogAfterThrowingAdvice"/>
+	
+	<bean id="classicPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+		<property name="mappedName" value="total"/>
+	</bean>
+	
+	<!-- 다른 핸들러와 달리 Before 핸들러는 앞으로 classicPointcut 내에 지정한 total 메소드만 위빙이되어 프록시가 작동한다 -->
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice"/>
+		<property name="pointcut" ref="classicPointCut"/>
+	</bean>
+	
+	<!-- 현재 어드바이스 하나당 하나의 어드바이저가 필요하다는 단점이 있다. 이는 최초버전이고 나중에 더 효율적인 방법 알려줄 것임 -->
+	<bean id="classicAroundAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logAroundAdvice"/>
+		<property name="pointcut" ref="classicPointCut"/>
+	</bean>
+	
 	<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<!-- 앞의 target은 setTarget을 의미, 뒤 ref의 target은 위의 target빈을 의미 -->
 		<!-- 프록시에서 인터페이스는 스프링이 자동으로 처리해주기 때문에 target이랑 핸들러(interceptorNAmes란 이름으로)만 주입해주면된다. -->
@@ -24,8 +41,10 @@
 			<!-- Before는 다른 기능에 앞서 먼저 수행 -->
 			<!-- AfterReturning은 앞선 주기능을 수행하는 함수(invocation.proceed(), method.invoke()등)가 반환된 후 나중 수행 -->
 			<!-- 메소드 실행 도중 예외가 발생하면 AfterReturning이 아닌 AfterThrowing이 실행된다. -->
-				<value>logAroundAdvice</value>
-				<value>logBeforeAdvice</value>
+				<!-- <value>logAroundAdvice</value> -->
+				<value>classicAroundAdvisor</value>
+				<!-- <value>logBeforeAdvice</value> -->
+				<value>classicBeforeAdvisor</value>
 				<value>logAfterReturningAdvice</value>
 				<value>logAfterThrowingAdvice</value>
 			</list>
