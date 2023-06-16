@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context">
+	
+	<!-- 스프링에서는 모든 설정을 setting xml에서 처리함 -->
+	<bean id="target" class="spring.aop.entity.NewlecExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
+	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
+	<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 앞의 target은 setTarget을 의미, 뒤 ref의 target은 위의 target빈을 의미 -->
+		<!-- 프록시에서 인터페이스는 스프링이 자동으로 처리해주기 때문에 target이랑 핸들러(interceptorNAmes란 이름으로)만 주입해주면된다. -->
+		<property name="target" ref="target"/>
+		<property name="interceptorNames">
+			<list>
+				<value>logAroundAdvice</value>
+			</list>
+		</property>
+	</bean>
+	
+</beans>
